@@ -1,28 +1,38 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <RegistrationInfo />
+    <RegistrationForm />
+    <div class="temp" @click="showSate">CLICK!!!</div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import RegistrationForm from "./components/registrationForm.vue";
+import RegistrationInfo from "./components/registrationInfo.vue";
 
+import { mapGetters } from "vuex";
 export default {
-  name: 'App',
+  name: "App",
+  computed: mapGetters(["getNewUser"]),
   components: {
-    HelloWorld
+    RegistrationForm,
+    RegistrationInfo
+  },
+  methods: {
+    ...mapGetters(["getNewUser"]),
+    showSate: function() {
+      console.log(this.getNewUser);
+    }
   }
-}
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+@import "./assets/css/style.css";
+.temp {
+  width: 200px;
+  height: 200px;
+  background-color: blue;
+  user-select: none;
 }
 </style>
