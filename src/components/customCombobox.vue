@@ -1,0 +1,42 @@
+<template>
+  <div class="combobox">
+    <input
+      class="registration-form__input combobox-input"
+      type="text"
+      v-bind:placeholder="placeholder"
+      v-bind:name="name"
+      v-model="comboboxValue"
+      @change="changeComboboxField"
+      readonly
+    />
+    <ul class="combobox-list">
+      <li v-for="(item, index) in list" v-bind:key="index" @click="changeValue">{{item}}</li>
+    </ul>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "CustomCombobox",
+  props: ["placeholder", "name", "list"],
+  data() {
+    return {
+      comboboxValue: null
+    };
+  },
+  watch: {
+    comboboxValue() {
+      this.$emit("change", {
+        name: this.$props.name,
+        value: this.comboboxValue
+      });
+    }
+  },
+  methods: {
+    changeComboboxField: function() {},
+    changeValue: function(e) {
+      this.comboboxValue = e.target.innerHTML;
+    }
+  }
+};
+</script>
