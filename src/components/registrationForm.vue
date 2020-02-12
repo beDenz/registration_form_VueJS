@@ -82,8 +82,8 @@
         />
       </div>
       <div class="registration-form__row margin-bottom-32px">
-        <label class="registration-form__label">Date of birth</label>
-        <input class="registration-form__input" type="date" name="birthday" @input="changeField" />
+        <label class="registration-form__label">Date of birth custom</label>
+        <Datapicker v-on:change="changeField" />
       </div>
       <div class="registration-form__row margin-bottom-72px">
         <label class="registration-form__label">Zip code</label>
@@ -112,11 +112,13 @@
 <script>
 import { mapMutations, mapGetters } from "vuex";
 import CustomCombobox from "./customCombobox.vue";
+import Datapicker from "./datapicker.vue";
 
 export default {
   name: "RegistrationForm",
   components: {
-    CustomCombobox
+    CustomCombobox,
+    Datapicker
   },
   computed: {
     ...mapGetters(["getNewUser"])
