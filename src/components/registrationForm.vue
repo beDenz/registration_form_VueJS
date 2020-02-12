@@ -1,14 +1,14 @@
 <template>
-  <div class="registration-form">
+  <div class="registration-form center-position-block padding-top-bottom-90px">
     <div class="registration-form__inner">
-      <div class="registration-form__row">
+      <div class="registration-form__row text-align-center">
         <h3 class="registration-form__title">Sing up</h3>
       </div>
-      <div class="registration-form__row error">
-        <label class="registration-form__label">
-          Login
-          <span>*</span>
-        </label>
+      <div
+        class="registration-form__row margin-bottom-32px"
+        v-bind:class="{error: validateErrors.indexOf('login') > -1 }"
+      >
+        <label class="registration-form__label required">Login</label>
         <input
           class="registration-form__input"
           type="text"
@@ -18,12 +18,11 @@
           @focus="clearError"
         />
       </div>
-
-      <div class="registration-form__row">
-        <label class="registration-form__label">
-          Email
-          <span>*</span>
-        </label>
+      <div
+        class="registration-form__row margin-bottom-32px"
+        v-bind:class="{error: validateErrors.indexOf('email') > -1 }"
+      >
+        <label class="registration-form__label required">Email</label>
         <input
           class="registration-form__input"
           type="text"
@@ -33,8 +32,7 @@
           @focus="clearError"
         />
       </div>
-
-      <div class="registration-form__row">
+      <div class="registration-form__row margin-bottom-32px">
         <label class="registration-form__label">Password</label>
         <input
           class="registration-form__input"
@@ -44,7 +42,7 @@
           @input="changeField"
         />
       </div>
-      <div class="registration-form__row">
+      <div class="registration-form__row margin-bottom-32px">
         <label class="registration-form__label">First name</label>
         <input
           class="registration-form__input"
@@ -54,8 +52,7 @@
           @input="changeField"
         />
       </div>
-
-      <div class="registration-form__row">
+      <div class="registration-form__row margin-bottom-32px">
         <label class="registration-form__label">Last name</label>
         <input
           class="registration-form__input"
@@ -65,60 +62,55 @@
           @input="changeField"
         />
       </div>
-
-      <div class="registration-form__row">
+      <div class="registration-form__row margin-bottom-32px">
         <label class="registration-form__label">Country</label>
         <CustomCombobox
           placeholder="Your home country..."
           name="country"
           v-on:change="changeField"
-          v-bind:list="['item1','item2','item3','item4','item5','item6']"
+          v-bind:list="countryList"
         />
       </div>
-
-      <div class="registration-form__row">
+      <div class="registration-form__row margin-bottom-32px">
         <label class="registration-form__label">City</label>
         <CustomCombobox
           placeholder="Your city..."
           name="city"
-          v-bind:list="['item1','item2','item3','item4','item5','item6']"
+          v-bind:list="cityList"
           v-on:change="changeField"
+          :disabled="!getNewUser.country"
         />
       </div>
-
-      <div class="registration-form__row">
+      <div class="registration-form__row margin-bottom-32px">
         <label class="registration-form__label">Date of birth</label>
-        <input
-          class="registration-form__input"
-          type="text"
-          placeholder="Your date of birth..."
-          name="birthday"
-          @input="changeField"
-        />
+        <input class="registration-form__input" type="date" name="birthday" @input="changeField" />
       </div>
-
-      <div class="registration-form__row">
+      <div class="registration-form__row margin-bottom-72px">
         <label class="registration-form__label">Zip code</label>
         <input
           class="registration-form__input"
           type="text"
           placeholder="Enter code"
           name="zipCode"
-          @input="changeField"
+          v-model="zipCode"
+          @input="validationZipCode"
+          @change="changeField"
         />
       </div>
-
       <div class="registration-form__row">
-        <div class="button">
+        <div class="button" @click="submit">
           <span class="button__text">sing up</span>
         </div>
       </div>
+    </div>
+    <div class="registration-form__success text-align-center" v-if="success">
+      <span>Registration success!</span>
     </div>
   </div>
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapMutations, mapGetters } from "vuex";
 import CustomCombobox from "./customCombobox.vue";
 
 export default {
@@ -126,23 +118,56 @@ export default {
   components: {
     CustomCombobox
   },
+  computed: {
+    ...mapGetters(["getNewUser"])
+  },
+  data() {
+    return {
+      countryList: [
+        "country1",
+        "country2",
+        "country3",
+        "country4",
+        "country5",
+        "country6"
+      ],
+      cityList: ["city1", "city2", "city3", "city4", "city5", "city6"],
+      validateErrors: [],
+      success: false,
+      zipCode: null
+    };
+  },
   methods: {
     ...mapMutations(["setState"]),
     changeField: function(e) {
-      if (e.target && e.target.value.trim()) {
+      if (e.target) {
         this.setState({ name: e.target.name, value: e.target.value });
       }
       if (e.name && e.value) {
         this.setState({ name: e.name, value: e.value });
       }
     },
-    setError: function() {},
-    clearError: function(e) {
-      if (e.target.parentNode.classList.contains("error")) {
-        e.target.parentNode.classList.remove("error");
+    validationZipCode: function(e) {
+      this.zipCode = e.target.value.replace(/[^0-9]/gi, "");
+    },
+    validationForm: function() {
+      const requiredField = ["login", "email"];
+
+      for (let key in this.getNewUser) {
+        if (requiredField.indexOf(key) > -1 && !this.getNewUser[key]) {
+          this.validateErrors.push(key);
+        }
       }
+    },
+    submit: function() {
+      this.validationForm();
+      this.success = !(this.validateErrors.length > 0);
+    },
+    clearError: function(e) {
+      this.validateErrors = this.validateErrors.filter(
+        item => item !== e.target.name
+      );
     }
-  },
-  mounted() {}
+  }
 };
 </script>

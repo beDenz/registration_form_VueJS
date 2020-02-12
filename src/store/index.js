@@ -19,10 +19,7 @@ export default new Vuex.Store({
     },
     actions: {},
     mutations: {
-        setState: function (state, {
-            name,
-            value
-        }) {
+        setState: function (state, { name, value }) {
             state.newUser = {
                 ...state.newUser,
                 [name]: value

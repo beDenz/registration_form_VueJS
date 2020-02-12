@@ -5,6 +5,7 @@
       type="text"
       v-bind:placeholder="placeholder"
       v-bind:name="name"
+      v-bind:disabled="disabled"
       v-model="comboboxValue"
       @change="changeComboboxField"
       readonly
@@ -18,7 +19,12 @@
 <script>
 export default {
   name: "CustomCombobox",
-  props: ["placeholder", "name", "list"],
+  props: {
+    placeholder: String,
+    name: String,
+    list: Array,
+    disabled: Boolean
+  },
   data() {
     return {
       comboboxValue: null
