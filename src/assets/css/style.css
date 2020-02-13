@@ -237,12 +237,18 @@ input[type=date]::-webkit-inner-spin-button {
 /* End Combobox style */
 
 
-/***/
-
+/* Custom Datapicker*/
 .custom-datapicker {
     position: relative;
 }
-
+.custom-datapicker__background {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+}
 .custom-datapicker:after {
     content: '';
     position: absolute;
@@ -328,3 +334,4 @@ input[type=date]::-webkit-inner-spin-button {
     background-color: #888888;
     color: #fff;
 }
+/* */

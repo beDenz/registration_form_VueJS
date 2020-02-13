@@ -7,7 +7,6 @@
       v-bind:name="name"
       v-bind:disabled="disabled"
       v-model="comboboxValue"
-      @change="changeComboboxField"
       readonly
     />
     <ul class="combobox-list">
@@ -39,7 +38,6 @@ export default {
     }
   },
   methods: {
-    changeComboboxField: function() {},
     changeValue: function(e) {
       this.comboboxValue = e.target.innerHTML;
     }

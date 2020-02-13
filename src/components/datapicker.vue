@@ -1,5 +1,6 @@
 <template>
   <div class="custom-datapicker">
+    <div class="custom-datapicker__background" v-if="openDates" @click="setOpenDates"></div>
     <input
       class="registration-form__input custom-datapicker__input"
       type="text"
@@ -139,7 +140,6 @@ export default {
       if (value > 0 && value < 10) {
         return "0" + value;
       }
-
       return value;
     },
     setOpenDates: function() {
